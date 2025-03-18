@@ -10,7 +10,7 @@ To help you with that, Plover provides a lightweight DSL for defining build phas
 
 #### Tiny & Embeddable 
 
-Plover consists of ~200 lines of plain Ruby, with no dependencies outside of the standard library.
+Plover consists of ~300 lines of plain Ruby, with no dependencies outside of the standard library.
 
 Because Plover is built to be embeddable, you can copy/paste `lib/plover.rb` into your project if you'd rather not use the gem. 
 
@@ -47,7 +47,7 @@ Or, add it to your project’s Gemfile:
 gem "plover"
 ```
 
-Because Plover is built to be embeddable, you can also just copy/paste `lib/plover.rb` into your project if you'd rather not use RubyGems (it's ~200 lines of plain Ruby, with no dependencies outside of the standard library).
+Because Plover is built to be embeddable, you can also just copy/paste `lib/plover.rb` into your project if you'd rather not use RubyGems (it's ~300 lines of plain Ruby, with no dependencies outside of the standard library).
 
 ## Usage
 

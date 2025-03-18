@@ -30,7 +30,7 @@ class PloverGemBuilder < Plover::Builder
   end
 
   def set_publish_keys
-    puts "Configuring credentials..."
+    log :info, "Configuring credentials..."
     home_gem_dir = File.expand_path("~/.gem")
     FileUtils.mkdir_p(home_gem_dir)
 
@@ -45,27 +45,27 @@ class PloverGemBuilder < Plover::Builder
   end
 
   def install_dependencies
-    puts "Installing dependencies..."
+    log :info, "Installing dependencies..."
     system("bundle install")
   end
 
   def validate_version
-    puts "Checking Plover::VERSION..."
+    log :info, "Checking Plover::VERSION..."
     fail_build("Invalid Plover::VERSION") unless flag(:gem_version) == Plover::VERSION
   end
 
   def standardize
-    puts "Running Standard..."
+    log :info, "Running Standard..."
     fail_build("Standardrb returned errors") unless system("bundle exec rake standard")
   end
 
   def spec
-    puts "Running RSpec..."
+    log :info, "Running RSpec..."
     fail_build("RSpec returned errors") unless system("bundle exec rake spec")
   end
 
   def build_plover
-    puts "Building Plover..."
+    log :info, "Building Plover..."
     fail_build("Building Plover failed.") unless system("bundle exec rake build")
 
     gem_path = Dir.glob("pkg/plover-#{flag(:gem_version)}.gem").map { |f| File.expand_path(f) }.first
@@ -76,7 +76,7 @@ class PloverGemBuilder < Plover::Builder
   end
 
   def push_gem
-    puts "Publishing Gem..."
+    log :info, "Publishing Gem..."
     fail_build("Pushing Plover to RubyGems failed.") unless system("gem push #{esc_artifact(:build, :gem)} --key rubygems")
     fail_build("Pushing Plover to GitHub Packages failed.") unless system("gem push #{esc_artifact(:build, :gem)} --key github --host 'https://rubygems.pkg.github.com/chtzvt'")
   end

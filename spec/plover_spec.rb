@@ -73,13 +73,13 @@ RSpec.describe Plover::Builder do
 
     it "does not raise error if expected flags are provided" do
       TestBuilder.expect_flags(:required_flag)
-      expect { TestBuilder.new(required_flag: "present") }.not_to raise_error
+      expect { TestBuilder.new({required_flag: "present"}) }.not_to raise_error
     end
   end
 
   describe "phase execution" do
     it "executes phase blocks in order" do
-      builder = TestBuilder.new(build_root: ".")
+      builder = TestBuilder.new({build_root: "."})
       builder.run_phase(:setup)
       builder.run_phase(:build)
       expect(builder.setup_called?).to be true
