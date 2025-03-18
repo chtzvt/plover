@@ -51,9 +51,9 @@ module Plover
       },
       options: {
         flags: {},
-        expected_flags: []
+        expected_flags: [],
+        common_include: :none
       },
-      include_common: :none,
       artifacts: {
         setup: {},
         before_build: {},
@@ -67,7 +67,6 @@ module Plover
       attr_reader :configuration
 
       def inherited(subclass)
-        auto_include_common
         subclass.instance_variable_set(:@configuration, deep_copy(configuration))
       end
 
@@ -108,12 +107,12 @@ module Plover
       end
 
       def auto_include_common
-        return if configuration[:options][:common_include] == :none
+        return if @configuration[:options][:common_include] == :none
 
         ObjectSpace.each_object(Module).select { |m| m&.name&.start_with?("Plover::Builder::Common::") }.each do |mod|
           next if mod.name.to_s.end_with?("::ClassMethods")
 
-          next if configuration[:options][:common_include].is_a?(Array) && !configuration[:options][:common_include].any? { |m| m.end_with?("::#{mod.name}") }
+          next if @configuration[:options][:common_include].is_a?(Array) && !@configuration[:options][:common_include].any? { |m| m == mod.name.split("::").last }
 
           mod.apply_concern(self) if mod.respond_to?(:apply_concern) && !included_modules.include?(mod)
         end

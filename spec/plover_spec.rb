@@ -23,6 +23,14 @@ class TestBuilder < Plover::Builder
   end
 end
 
+module Plover::Builder::Common::Failer
+  extend Plover::Concern
+
+  included do
+    fail_build("Failer was included")
+  end
+end
+
 module Plover::Builder::Common::Dummy
   extend Plover::Concern
 
@@ -99,7 +107,7 @@ RSpec.describe Plover::Builder do
   describe "Concern inclusion" do
     before do
       # Tell the builder to include the Dummy module.
-      ConcernTestBuilder.common_include("::Plover::Builder::Common::Dummy")
+      ConcernTestBuilder.common_include("Dummy")
       ConcernTestBuilder.auto_include_common
     end
 
@@ -112,6 +120,11 @@ RSpec.describe Plover::Builder do
     it "adds class methods from the concern" do
       expect(ConcernTestBuilder).to respond_to(:dummy_class_method)
       expect(ConcernTestBuilder.dummy_class_method).to eq("class value")
+    end
+
+    it "includes only the expected concern" do
+      expect(ConcernTestBuilder.included_modules).to include(Plover::Builder::Common::Dummy)
+      expect(ConcernTestBuilder.included_modules).not_to include(Plover::Builder::Common::Failer)
     end
   end
 end
