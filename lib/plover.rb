@@ -4,7 +4,7 @@ module Plover
   require "shellwords"
   require "fileutils"
 
-  VERSION = "1.1.1"
+  VERSION = "1.1.2"
 
   class PloverError < StandardError; end
 
@@ -115,6 +115,7 @@ module Plover
       attr_reader :configuration
 
       def inherited(subclass)
+        auto_include_common
         subclass.extend(Log)
         subclass.instance_variable_set(:@configuration, deep_copy(configuration))
       end
