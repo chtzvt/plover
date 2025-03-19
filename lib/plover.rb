@@ -4,7 +4,7 @@ module Plover
   require "shellwords"
   require "fileutils"
 
-  VERSION = "1.1.0"
+  VERSION = "1.1.1"
 
   class PloverError < StandardError; end
 

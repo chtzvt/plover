@@ -28,6 +28,8 @@ Gem::Specification.new do |spec|
     end
   end
 
+  spec.add_dependency "logger"
+
   spec.bindir = "exe"
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
