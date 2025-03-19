@@ -4,7 +4,7 @@ module Plover
   require "shellwords"
   require "fileutils"
 
-  VERSION = "1.1.2"
+  VERSION = "1.1.3"
 
   class PloverError < StandardError; end
 
@@ -115,7 +115,6 @@ module Plover
       attr_reader :configuration
 
       def inherited(subclass)
-        auto_include_common
         subclass.extend(Log)
         subclass.instance_variable_set(:@configuration, deep_copy(configuration))
       end
@@ -130,6 +129,7 @@ module Plover
 
       def common_include_all
         configuration[:options][:common_include] = :all
+        auto_include_common
       end
 
       def common_include_none
@@ -148,6 +148,7 @@ module Plover
         configuration[:options][:common_include] = [] unless configuration[:options][:common_include].is_a?(Array)
 
         configuration[:options][:common_include].concat(modules)
+        auto_include_common
       end
 
       def env_flags
@@ -194,8 +195,8 @@ module Plover
     def initialize(flags = {}, use_env_flags: true)
       @configuration = self.class.configuration
 
-      @configuration[:options][:log][:level] = flags[:log_level] || ENV["PLOVER_LOG_LEVEL"]&.to_sym || @configuration[:options][:log][:level] || :info
-      @configuration[:options][:log][:sink] = flags[:log_sink] || ENV["PLOVER_LOG_SINK"] || @configuration[:options][:log][:sink] || :stdout
+      @configuration[:options][:log][:level] = ENV["PLOVER_LOG_LEVEL"]&.to_sym || flags[:log_level] || @configuration[:options][:log][:level] || :info
+      @configuration[:options][:log][:sink] = ENV["PLOVER_LOG_SINK"] || flags[:log_sink] || @configuration[:options][:log][:sink] || :stdout
 
       @configuration[:options][:flags] = @configuration[:options][:flags].merge(flags).merge(use_env_flags ? self.class.env_flags : {})
 
