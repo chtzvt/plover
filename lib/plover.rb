@@ -282,7 +282,7 @@ module Plover
 
     def run
       run_phase(:setup)
-      Dir.chdir(flag(:build_root) || ".") do
+      Dir.chdir(ENV["PLOVER_BUILD_ROOT"] || flag(:build_root) || ".") do
         run_phase(:before_build)
         run_phase(:build)
         run_phase(:after_build)
