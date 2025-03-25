@@ -4,7 +4,7 @@ module Plover
   require "shellwords"
   require "fileutils"
 
-  VERSION = "1.1.3"
+  VERSION = "1.1.4"
 
   class PloverError < StandardError; end
 
@@ -288,7 +288,7 @@ module Plover
         run_phase(:after_build)
       end
       run_phase(:teardown)
-      logger.close
+      logger.close unless @configuration[:options][:log][:sink] == :stdout
     end
   end
 end
